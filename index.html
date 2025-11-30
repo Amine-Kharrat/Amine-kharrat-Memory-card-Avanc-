@@ -1,0 +1,58 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Memory Avancé</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="app">
+    <header class="header">
+      <h1>Memory Avancé</h1>
+      <div class="controls">
+        <label for="level">Niveau</label> <!-- for level juste mich ywali teba3 level -->
+        <select id="level" aria-label="Choisir le niveau">
+          <option value="easy">Facile</option>
+          <option value="medium" selected>Moyen</option>
+          <option value="hard">Difficile</option>
+        </select>
+
+        <button id="startBtn" class="btn">Démarrer</button>
+        <button id="resetBtn" class="btn ghost">Réinitialiser</button>
+      </div>
+    </header>
+
+    <section class="status">
+      <div class="stat">
+        <div class="label">Temps</div>
+        <div id="timer" class="value">00:00</div>
+      </div>
+      <div class="stat">
+        <div class="label">Score</div>
+        <div id="score" class="value">0</div>
+      </div>
+      <div class="stat">
+        <div class="label">Meilleur</div>
+        <div id="best" class="value">—</div>
+      </div>
+    </section>
+
+    <section id="gameBoardWrap" class="board-wrap">
+      <div id="gameBoard" class="board" role="grid" aria-label="Plateau du memory"></div>
+    </section>
+
+    <section class="info">
+      <p>
+        Cartes spéciales : <strong>Bombe</strong> (pénalité temps/score), <strong>Joker</strong> (revele et matche
+        automatiquement une paire), <strong>Gel</strong> (gèle chrono 5s). Les effets sont limités par niveau.
+      </p>
+    </section>
+
+    
+  </main>
+
+  <script src="java.js"></script>
+</body>
+</html>
