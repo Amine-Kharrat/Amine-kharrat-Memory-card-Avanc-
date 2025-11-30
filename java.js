@@ -286,3 +286,43 @@ function shuffle(array){
   }
   return array;
 }
+
+function renderBoard(){
+  gameBoard.innerHTML = '';
+  gameBoard.className = 'board cols';
+  state.deck.forEach(card => {
+    const cardEl = document.createElement('div');
+    cardEl.className = `card${card.special ? ' special ' + card.special : ''}`;
+    cardEl.setAttribute('data-id', card.id);
+    cardEl.innerHTML = `
+      <div class="cardInner">
+        <div class="face back" aria-hidden="true">
+          <div class="symbol">?</div>
+        </div>
+        <div class="face front" aria-hidden="true">
+          ${card.type === 'pair' ? `<div class="pairVal">${card.val}</div>` : `<div class="pairVal specialVal">${card.val}</div>`}
+        </div>
+      </div>
+    `;
+    if(card.matched) cardEl.classList.add('match');
+    gameBoard.appendChild(cardEl);
+  });
+}
+
+function buildDeck(levelCfg){
+  const { pairs, special } = levelCfg; // yhez les valeurs
+  const chosen = SYMBOLS.slice(0, pairs); //kadesh men pair
+  const basePairs = chosen.flatMap(sym => ([{ type:'pair', val:sym }, { type:'pair', val:sym }])); //ydupliqui lwhid
+  let deck = [...basePairs]; //y3abi fil les normales
+  const specials = []; //y3amer fil les specials
+  for(const [name, count] of Object.entries(special)){
+    for(let i=0;i<count;i++){
+      specials.push({ type:'special', special:name, val:name.toUpperCase() });
+    }
+  }
+
+  deck = deck.concat(specials); //l'ajout final te3hom
+  shuffle(deck); //ymashki 
+  deck = deck.map((c, idx) => ({ ...c, id: idx, revealed:false, matched:false })); //na3tiw il id w tebdew par défau ma9loubin w mismatched 
+  return deck;
+}
