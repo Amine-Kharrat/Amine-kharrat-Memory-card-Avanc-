@@ -205,9 +205,11 @@ function checkMatch(){
     const matchedPairs = state.deck.filter(d => d.type==='pair' && d.matched).length / 2;
     const pairMatchedCount = new Set(state.deck.filter(d=>d.type==='pair'&&d.matched).map(x=>x.val)).size;
     if(pairMatchedCount >= totalPairs){ //ki terba7 hedha
-      state.running = false;
-      stopTimer();
-      gameOver(true);
+        state.running = false;
+        stopTimer();
+        setTimeout(() => {
+            gameOver(true);
+        }, 300);
     }
   } else {
         state.score = Math.max(0, state.score - 10);
@@ -264,7 +266,8 @@ function handleSpecialCard(card, cardEl){
           revealCard(pc, el);
           markMatched(pc, el);
         });
-        state.score += 120;
+        state.score += 80;
+        updateDisplays();
       }
     }
   } else if(name === 'freeze'){
