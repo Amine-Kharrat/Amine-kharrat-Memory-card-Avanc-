@@ -191,6 +191,44 @@ function onCardClick(target){
   }
 }
 
+function checkMatch(){
+  const [a,b] = state.flipped;
+  if(!a || !b) return;
+  if(a.card.val === b.card.val && a.card.type === 'pair' && b.card.type === 'pair'){
+    markMatched(a.card, a.el);
+    markMatched(b.card, b.el);
+    state.matchedCount++;
+    state.score += 100; 
+    state.flipped = [];
+    updateDisplays();
+    const totalPairs = state.pairsTotal;
+    const matchedPairs = state.deck.filter(d => d.type==='pair' && d.matched).length / 2;
+    const pairMatchedCount = new Set(state.deck.filter(d=>d.type==='pair'&&d.matched).map(x=>x.val)).size;
+    if(pairMatchedCount >= totalPairs){ //ki terba7 hedha
+      state.running = false;
+      stopTimer();
+      gameOver(true);
+    }
+  } else {
+        state.score = Math.max(0, state.score - 10);
+        state.mismatchLock = true;
+        const els = [a.el, b.el];
+        setTimeout(() => {
+            els.forEach(e => e.classList.add('mismatch'));
+            setTimeout(() => {
+                els.forEach(e => e.classList.remove('mismatch'));
+                hideCard(a.card, a.el);
+                hideCard(b.card, b.el);
+                state.flipped = [];
+                state.mismatchLock = false;
+                updateDisplays();
+
+            }, 600);
+
+        }, 400);
+    }
+}
+
 function flashBoard(type){
   if(type === 'bomb'){
     gameBoard.style.transition = 'box-shadow 120ms';
@@ -241,3 +279,10 @@ function handleSpecialCard(card, cardEl){
   }
 }
 
+function shuffle(array){
+  for(let i = array.length -1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i+1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
