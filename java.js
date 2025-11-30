@@ -44,3 +44,55 @@ function saveBest(level, score, time){
     localStorage.setItem(key, JSON.stringify({score, time, date: Date.now()}));
   }
 }
+
+function loadBest(level){
+  const key = `memory_best_${level}`;
+  const prev = JSON.parse(localStorage.getItem(key));
+  if(prev) return `${prev.score} pts • ${formatTime(prev.time)}`;
+  return '—';
+}
+
+function stopTimer(){
+  if(state.timerId) clearInterval(state.timerId);
+  state.timerId = null;
+}
+
+function updateDisplays(){
+  timerEl.textContent = formatTime(state.timeLeft);
+  scoreEl.textContent = state.score;
+  bestEl.textContent = loadBest(levelSelect.value);
+}
+
+levelSelect.addEventListener('change', () => {
+  bestEl.textContent = loadBest(levelSelect.value);
+});
+
+(function init(){
+  bestEl.textContent = loadBest(levelSelect.value);
+  timerEl.textContent = formatTime(0);
+  scoreEl.textContent = '0';
+})();
+
+
+startBtn.addEventListener('click', () => startGame());
+
+function resetUIState(){
+  stopTimer();
+  state.flipped = [];
+  state.deck = [];
+  state.matchedCount = 0;
+  state.score = 0;
+  state.timeLeft = 0;
+  state.running = false;
+  state.freezeTimeout && clearTimeout(state.freezeTimeout);
+  state.freezeTimeout = null;
+  updateDisplays();
+  gameBoard.innerHTML = '';
+}
+
+resetBtn.addEventListener('click', () => {
+  if(confirm('Réinitialiser et effacer la partie actuelle ?')) {
+    localStorage.clear();
+    resetUIState();
+  }
+});
