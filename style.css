@@ -126,7 +126,7 @@ select option {
   color: #f8fafc;
 }
 .back{
-  background: var(--card-back);
+  background: linear-gradient(135deg,#111827,#0b1220);
   color: #f8fafc;
   display:flex;
   flex-direction:column;
