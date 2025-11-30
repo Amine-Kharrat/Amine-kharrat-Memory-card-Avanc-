@@ -1,0 +1,86 @@
+
+body{
+  margin:0;
+  background: #071021;
+  color: #e6eef6;
+  padding:20px;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  gap:20px;
+}
+
+.app{
+  width:min(1100px,100%);
+  max-width:1100px;
+  margin: 16px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+}
+.header h1{
+  margin:0;
+  font-size:1.6rem;
+  letter-spacing:0.4px;
+  color: white;
+}
+.controls{
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+select, .btn{ /* ken hachti bil btn ghost nejem na3mel .btn.ghost */
+  padding:8px 12px;
+  border-radius:8px;
+  border:0;
+  background:rgba(255,255,255,0.06);
+  color:inherit;
+  backdrop-filter: blur(6px);
+  cursor:pointer;
+}
+
+select option {
+    background-color: #1e1e2f; 
+    color: white;
+}
+
+.status{
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+.stat{
+  background:rgba(255,255,255,0.06);
+  padding:10px 12px;
+  border-radius:10px;
+  min-width:100px;
+  text-align:center;
+}
+.stat .label{
+    font-size:0.75rem; 
+    color:#9aa4b2;
+}
+.stat .value{
+    font-weight:700; 
+    font-size:1.1rem
+}
+
+.board-wrap{
+  padding:12px;
+  background: linear-gradient(180deg,#071021 0%, #0f1724 100%);
+  border-radius:12px;
+}
+.board{
+  display:grid;
+  gap:12px;
+  justify-content:center;
+  align-items:center;
+  padding:12px;
+}
