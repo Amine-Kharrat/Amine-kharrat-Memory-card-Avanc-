@@ -104,6 +104,23 @@ levelSelect.addEventListener('change', () => {
 
 startBtn.addEventListener('click', () => startGame());
 
+function startGame(){
+  stopTimer();
+  resetUIState();
+  const level = levelSelect.value;
+  const cfg = LEVELS[level];
+  state.pairsTotal = cfg.pairs;
+  state.deck = buildDeck(cfg);
+  state.matchedCount = 0;
+  state.score = 0;
+  state.timeLeft = cfg.time;
+  state.running = true;
+  state.mismatchLock = false;
+  updateDisplays();
+  renderBoard();
+  startTimer();
+}
+
 function resetUIState(){
   stopTimer();
   state.flipped = [];
