@@ -173,3 +173,54 @@ function onCardClick(target){
     checkMatch();
   }
 }
+
+function flashBoard(type){
+  if(type === 'bomb'){
+    gameBoard.style.transition = 'box-shadow 120ms';
+    gameBoard.style.boxShadow = '0 0 40px rgba(239,68,68,0.5)';
+    setTimeout(()=> gameBoard.style.boxShadow = '', 300);
+  }
+}
+
+function handleSpecialCard(card, cardEl){
+  markMatched(card, cardEl); 
+  state.score += 20; 
+  updateDisplays();
+
+  const name = card.special;
+  if(name === 'bomb'){
+    state.timeLeft = Math.max(0, state.timeLeft - 12);
+    state.score = Math.max(0, state.score - 40);
+    flashBoard('bomb');
+    updateDisplays();
+    if(state.timeLeft <= 0) {
+      state.running = false;
+      gameOver(false);
+    }
+  } else if(name === 'joker'){
+    const unmatchedPairs = state.deck.filter(c => c.type==='pair' && !c.matched);
+    if(unmatchedPairs.length >= 2){
+      const values = [...new Set(unmatchedPairs.map(x=>x.val))];
+      const chosenVal = values[Math.floor(Math.random()*values.length)];
+      const pairCards = state.deck.filter(c => c.type==='pair' && c.val===chosenVal && !c.matched);
+      if(pairCards.length === 2){
+        pairCards.forEach(pc => {
+          const el = gameBoard.querySelector(`.card[data-id='${pc.id}']`);
+          revealCard(pc, el);
+          markMatched(pc, el);
+        });
+        state.score += 120;
+      }
+    }
+  } else if(name === 'freeze'){
+    if(state.timerId){
+      clearInterval(state.timerId);
+      state.freezeTimeout && clearTimeout(state.freezeTimeout);
+      state.freezeTimeout = setTimeout(() => {
+        startTimer();
+        state.freezeTimeout = null;
+      }, 5000);
+    }
+  }
+}
+
