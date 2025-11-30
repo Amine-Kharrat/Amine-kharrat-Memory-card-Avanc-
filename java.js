@@ -124,3 +124,52 @@ resetBtn.addEventListener('click', () => {
     resetUIState();
   }
 });
+
+gameBoard.addEventListener('click', (e) => {
+  const card = e.target.closest('.card');
+  if(!card) return;
+  onCardClick(card);
+});
+
+
+function revealCard(card, el){
+  card.revealed = true;
+  el.classList.add('flipped');
+  el.setAttribute('aria-pressed','true');
+}
+
+function hideCard(card, el){
+  card.revealed = false;
+  el.classList.remove('flipped');
+  el.setAttribute('aria-pressed','false');
+}
+
+function markMatched(card, el){
+  card.matched = true;
+  el.classList.add('match');
+  el.setAttribute('aria-pressed','true');
+}
+
+
+
+function onCardClick(target){
+  if(!state.running || state.mismatchLock) return;
+  const cardEl = target.closest('.card');
+  if(!cardEl) return;
+  const id = Number(cardEl.dataset.id);
+  const card = state.deck.find(c => c.id === id);
+  if(!card || card.revealed || card.matched) return;
+
+  revealCard(card, cardEl);
+
+  if(card.type === 'special'){
+    handleSpecialCard(card, cardEl);
+
+    return;
+  }
+
+  state.flipped.push({ card, el: cardEl });
+  if(state.flipped.length === 2){
+    checkMatch();
+  }
+}
