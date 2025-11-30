@@ -52,6 +52,34 @@ function loadBest(level){
   return '—';
 }
 
+function startTimer(){
+  if(state.timerId) clearInterval(state.timerId);
+  state.timerId = setInterval(() => {
+    if(!state.running) return;
+    state.timeLeft--;
+    updateDisplays();
+    if(state.timeLeft <= 0){
+      clearInterval(state.timerId);
+      state.running = false;
+      gameOver(false);
+    }
+  }, 1000);
+}
+
+function gameOver(win){
+  state.running = false;
+  stopTimer();
+  const level = levelSelect.value;
+  if(win){
+    const used = LEVELS[level].time - state.timeLeft;
+    saveBest(level, state.score, used);
+    alert(`Bravo ! Niveau terminé. Score: ${state.score} — Temps: ${formatTime(used)}.`);
+  } else {
+    alert(`Temps écoulé ! Score: ${state.score}. Réessaie.`);
+  }
+  bestEl.textContent = loadBest(level);
+}
+
 function stopTimer(){
   if(state.timerId) clearInterval(state.timerId);
   state.timerId = null;
